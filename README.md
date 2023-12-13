@@ -14,8 +14,5 @@ LAL27	-	WORK PLACE BANKING FACILITY
 LAL30	-	STOCK FINANCE LOAN - LCY
 LAL32	-	GOVERNMENT SCHEME WORK PLACE BANKING FACILITY
 
-The variables used to build this model are 
-'REP_PERD_MTHS', 'no_of_loan_accounts','FLOW_AMT', 'median_eod_bal_3_weeks', 'DIS_AMT','avg_credit_to_debit_amt_ratio_3_weeks', 'median_credit_to_debit_ratio_3_weeks','no_of_non_loan_accounts', 'MEDIAN_WEEKLY_DEBIT_CREDIT_COUNT_RATIO', 'AGE_WITH_BANK'
 
-The attached notebook has both EDA and Modelling.
 
