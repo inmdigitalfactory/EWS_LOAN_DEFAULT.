@@ -168,7 +168,53 @@ LEFT JOIN TRANSCTE ON TRANSCTE.ACID = MAINCTE.ACID
 );
 
 ---------------5-----------------------
-
+-----EOD Corrected 
+WITH RATECTE AS (
+    SELECT
+        FXD_CRNCY_CODE,
+        RTLIST_DATE,
+        VAR_CRNCY_UNITS
+    FROM
+        TBAADM.RTH@FINACLE
+    WHERE
+        VAR_CRNCY_CODE = 'KES'
+        AND RTLIST_NUM = 1
+        AND RATECODE = 'MID'
+)
+SELECT 
+    D.CIF_ID, 
+    EAB.EOD_DATE, 
+    SUM(CASE 
+            WHEN EAB.EAB_CRNCY_CODE <> 'KES' THEN 
+                EAB.TRAN_DATE_BAL * COALESCE(
+                    (
+                        SELECT R.VAR_CRNCY_UNITS
+                        FROM RATECTE R
+                        WHERE R.FXD_CRNCY_CODE = EAB.EAB_CRNCY_CODE
+                          AND R.RTLIST_DATE = EAB.EOD_DATE
+                        FETCH FIRST 1 ROWS ONLY
+                    ),
+                    1 -- Default to 1 if no conversion rate is found
+                )
+            ELSE 
+                EAB.TRAN_DATE_BAL 
+        END) AS TRAN_DATE_BAL
+FROM 
+    CS_DETAIL_RETAIL D
+LEFT JOIN 
+    TBAADM.GAM@FINACLE G ON G.CIF_ID = D.CIF_ID 
+LEFT JOIN 
+    TBAADM.EAB@FINACLE EAB ON EAB.ACID = G.ACID
+LEFT JOIN 
+    TRANSACTING_RANGE T ON D.CIF_ID = T.CIF_ID
+WHERE 
+    G.SCHM_CODE NOT LIKE 'L%' 
+    AND G.SCHM_CODE != 'CAL29'
+    AND EAB.EOD_DATE BETWEEN T.StartDate AND T.EndDate
+GROUP BY 
+    D.CIF_ID, 
+    EAB.EOD_DATE;
+------------------------
 CREATE TABLE CS_EOD_RETAIL AS
 (
 select a.CIF_ID, a.EOD_DATE, sum(a.CONVERTED_AMOUNT) as TRAN_DATE_BAL
