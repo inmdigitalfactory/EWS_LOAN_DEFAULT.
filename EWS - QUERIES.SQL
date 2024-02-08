@@ -264,8 +264,9 @@ LEFT JOIN IMKE.OTG_INDIVIDUAL_TRANSACTION_ANALYSIS A ON A.CUSTOMER_CIF = D.CIF_I
 );
 
 -----------7--------------------
-CREATE TABLE Base_table_ews AS
-(
+CREATE TABLE Base_table_ews2 
+AS(
+
 SELECT
     C.CIF_ID,
     G.ACID,
@@ -301,8 +302,8 @@ FROM
 WHERE
     C.CIF_ID = G.CIF_ID
     AND C.CIF_ID = M.CUSTOMERID
-    AND G.SCHM_CODE = S.SCHM_CODE
-    AND L.ACID = G.ACID
+   AND G.SCHM_CODE = S.SCHM_CODE
+   AND L.ACID = G.ACID
     AND GAC.ACID = G.ACID
     AND LRS.ACID = G.ACID
     AND LHT.ACID = G.ACID
@@ -330,8 +331,8 @@ GROUP BY
     LHT.APPLICABLE_DATE,
     L.REP_PERD_MTHS,
     GAC.DPD_CNTR,
-    LRS.FLOW_ID
-);
+   LRS.FLOW_ID
+)
 
 -----------------8-----------------------------
 
@@ -396,7 +397,7 @@ LEFT JOIN TRANSCTE ON TRANSCTE.ACID = MAINCTE.ACID
 
 --------------12-----------------
 
-
+-------ALL CUSTOMERS EXTRACTION QUERIES----------
 
 
 
